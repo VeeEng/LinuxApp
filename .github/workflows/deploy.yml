@@ -3,7 +3,7 @@ name: Deploy On Server
 
 env:
   DOTNET_VERSION: '5.0.x'                 # set this to the .NET Core version to use
-  DOTNET_ROOT: 'homer'
+  DOTNET_ROOT: './'
 
 on:
   push:
@@ -15,25 +15,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      
-      - name: Set up .NET Core
-        uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: ${{ env.DOTNET_VERSION }}
-      
-      - name: Set up dependency caching for faster builds
-        uses: actions/cache@v2
-        with:
-          path: ~/.nuget/packages
-          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-nuget-
-
-      - name: Build with dotnet
-        run: dotnet build --configuration Release
-
-      - name: dotnet publish
-        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
 
       - name: Copy files via scp
         uses: appleboy/scp-action@master              
@@ -42,7 +23,7 @@ jobs:
           username: ${{ secrets.USERNAME }}
           port: ${{ secrets.PORT }}
           key: ${{ secrets.SSHKEY }}
-          source: ${{env.DOTNET_ROOT}}/myapp
+          source: ${{env.DOTNET_ROOT}}
           target: ${{ secrets.COPY_TO }}
 
       - name: Move files to correct place
@@ -52,5 +33,5 @@ jobs:
           username: ${{ secrets.USERNAME }}
           port: ${{ secrets.PORT }}
           key: ${{ secrets.SSHKEY }}
-          script: rm -rf ${{ secrets.COPY_LAST }};mv ${{ secrets.COPY_FROM }} ${{ secrets.COPY_LAST }}
+          script: rm -rf ${{ secrets.COPY_LAST }};mv ${{ secrets.COPY_FROM }} ${{ secrets.COPY_LAST }}; cd ${{ secrets.COPY_LAST }}; dotnet publish --configuration Release;
           
