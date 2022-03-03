@@ -34,5 +34,5 @@ jobs:
           username: ${{ secrets.USERNAME }}
           port: ${{ secrets.PORT }}
           key: ${{ secrets.SSHKEY }}
-          script: rm -rf ${{ secrets.COPY_LAST }};mv ${{ secrets.COPY_FROM }} ${{ secrets.COPY_LAST }}; cd ${{ secrets.COPY_LAST }}; dotnet publish --configuration Release; nginx -s reload; cd {{ secrets.APP_NAME }}/bin/Release/net5.0/; dotnet {{ secrets.APP_NAME }}.dll 
+          script: rm -rf ${{ secrets.COPY_LAST }};mv ${{ secrets.COPY_FROM }} ${{ secrets.COPY_LAST }}; cd ${{ secrets.COPY_LAST }}; dotnet publish --configuration Release; nginx -s reload; cd {{ secrets.APP_NAME }}; cd bin; cd Release; cd net5.0; dotnet {{ secrets.APP_NAME }}.dll 
           
