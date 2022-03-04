@@ -43,7 +43,7 @@ jobs:
           username: ${{ secrets.USERNAME }}
           port: ${{ secrets.PORT }}
           key: ${{ secrets.SSHKEY }}
-          source: '.$env:APP_FOLDER
+          source: '.$env:APP_FOLDER'
           target: ${{ secrets.COPY_TO }}
 
       - name: Move files to temp folder
