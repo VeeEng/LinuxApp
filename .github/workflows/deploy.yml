@@ -4,7 +4,7 @@ name: Deploy On Server
 env:
   DOTNET_VERSION: '5.0.x'                 # set this to the .NET Core version to use
   DOTNET_ROOT: './'
-  APP_FOLDER: '~/app/'
+  APP_NAME: 'LinuxApp.Api'
 
 on:
   push:
@@ -43,7 +43,7 @@ jobs:
           username: ${{ secrets.USERNAME }}
           port: ${{ secrets.PORT }}
           key: ${{ secrets.SSHKEY }}
-          script: rm -rf app/;cd ${{ secrets.COPY_LAST }};dotnet build -c Release -o $APP_FOLDER;dotnet publish -c Release -o $APP_FOLDER;
+          script: rm -rf app/;cd ${{ secrets.COPY_LAST }};dotnet build -c Release -o ~/app;dotnet publish -c Release -o ~/app;
 
       - name: Move files to deployment folder
         uses: appleboy/ssh-action@master
