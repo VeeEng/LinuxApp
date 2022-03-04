@@ -47,7 +47,6 @@ jobs:
 
       - name: Move files to deployment folder
         uses: appleboy/ssh-action@master
-        env:
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
