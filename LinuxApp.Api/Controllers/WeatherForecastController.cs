@@ -48,5 +48,11 @@ namespace LinuxApp.Api.Controllers
             })
             .ToArray();
         }
+
+        [HttpGet("kupsy")]
+        public string GetThem()
+        {
+            return "Kupsy is an idiot";
+        }
     }
 }
