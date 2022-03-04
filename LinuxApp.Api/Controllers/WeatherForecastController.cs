@@ -36,7 +36,7 @@ namespace LinuxApp.Api.Controllers
             .ToArray();
         }
 
-        [HttpGet("abasiteners")]
+        [HttpGet("loafers")]
         public IEnumerable<WeatherForecast> Getters()
         {
             var rng = new Random();
