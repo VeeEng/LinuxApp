@@ -4,7 +4,7 @@ name: Deploy On Server
 env:
   DOTNET_VERSION: '5.0.x'                 # set this to the .NET Core version to use
   DOTNET_ROOT: './'
-  APP_FOLDER: '~/app'
+  APP_FOLDER: '/app'
 
 on:
   push:
@@ -43,7 +43,7 @@ jobs:
           username: ${{ secrets.USERNAME }}
           port: ${{ secrets.PORT }}
           key: ${{ secrets.SSHKEY }}
-          source: './myapp'
+          source: '.$env:APP_FOLDER
           target: ${{ secrets.COPY_TO }}
 
       - name: Move files to temp folder
@@ -62,7 +62,7 @@ jobs:
           username: ${{ secrets.USERNAME }}
           port: ${{ secrets.PORT }}
           key: ${{ secrets.SSHKEY }}
-          script: sudo systemctl stop ${{ secrets.APP_SERVICE }};sudo rm -rf ${{ secrets.APP_LOCATION }};sudo mv ${{ secrets.COPY_LAST }}/myapp ${{ secrets.APP_LOCATION }};sudo systemctl start ${{ secrets.APP_SERVICE }};sudo systemctl reload nginx;
+          script: sudo systemctl stop ${{ secrets.APP_SERVICE }};sudo rm -rf ${{ secrets.APP_LOCATION }};sudo mv ${{ secrets.COPY_LAST }}${{ env.APP_FOLDER }} ${{ secrets.APP_LOCATION }};sudo systemctl start ${{ secrets.APP_SERVICE }};sudo systemctl reload nginx;
 
       # - name: Copy files via scp
       #   uses: appleboy/scp-action@master              
