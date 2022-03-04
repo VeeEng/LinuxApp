@@ -17,6 +17,25 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: Set up .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+      
+      - name: Set up dependency caching for faster builds
+        uses: actions/cache@v2
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget-
+
+      - name: Build with dotnet
+        run: dotnet build --configuration Release
+
+      - name: dotnet publish
+        run: dotnet publish -c Release -o myapp
+
       - name: Copy files via scp
         uses: appleboy/scp-action@master              
         with:
@@ -24,7 +43,7 @@ jobs:
           username: ${{ secrets.USERNAME }}
           port: ${{ secrets.PORT }}
           key: ${{ secrets.SSHKEY }}
-          source: ${{env.DOTNET_ROOT}}
+          source: './myapp'
           target: ${{ secrets.COPY_TO }}
 
       - name: Move files to temp folder
@@ -34,16 +53,7 @@ jobs:
           username: ${{ secrets.USERNAME }}
           port: ${{ secrets.PORT }}
           key: ${{ secrets.SSHKEY }}
-          script: rm -rf ${{ secrets.COPY_LAST }};mv ${{ secrets.COPY_FROM }} ${{ secrets.COPY_LAST }};cd ${{ secrets.COPY_LAST }};
-
-      - name: Build and publish app
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          port: ${{ secrets.PORT }}
-          key: ${{ secrets.SSHKEY }}
-          script: rm -rf app/;cd ${{ secrets.COPY_LAST }};dotnet build -c Release -o ${{ env.APP_FOLDER }};dotnet publish -c Release -o ${{ env.APP_FOLDER }};
+          script: rm -rf ${{ secrets.COPY_LAST }};mv ${{ secrets.COPY_FROM }} ${{ secrets.COPY_LAST }};
 
       - name: Move files to deployment folder
         uses: appleboy/ssh-action@master
@@ -52,5 +62,42 @@ jobs:
           username: ${{ secrets.USERNAME }}
           port: ${{ secrets.PORT }}
           key: ${{ secrets.SSHKEY }}
-          script: echo $APP_SERVICE;sudo systemctl stop ${{ secrets.APP_SERVICE }};sudo rm -rf ${{ secrets.APP_LOCATION }};sudo mv app/ ${{ secrets.APP_LOCATION }};sudo systemctl start ${{ secrets.APP_SERVICE }};sudo systemctl reload nginx;
+          script: sudo systemctl stop ${{ secrets.APP_SERVICE }};sudo rm -rf ${{ secrets.APP_LOCATION }};sudo mv ${{ secrets.COPY_LAST }} ${{ secrets.APP_LOCATION }};sudo systemctl start ${{ secrets.APP_SERVICE }};sudo systemctl reload nginx;
+
+      # - name: Copy files via scp
+      #   uses: appleboy/scp-action@master              
+      #   with:
+      #     host: ${{ secrets.HOST }}
+      #     username: ${{ secrets.USERNAME }}
+      #     port: ${{ secrets.PORT }}
+      #     key: ${{ secrets.SSHKEY }}
+      #     source: ${{env.DOTNET_ROOT}}
+      #     target: ${{ secrets.COPY_TO }}
+
+      # - name: Move files to temp folder
+      #   uses: appleboy/ssh-action@master
+      #   with:
+      #     host: ${{ secrets.HOST }}
+      #     username: ${{ secrets.USERNAME }}
+      #     port: ${{ secrets.PORT }}
+      #     key: ${{ secrets.SSHKEY }}
+      #     script: rm -rf ${{ secrets.COPY_LAST }};mv ${{ secrets.COPY_FROM }} ${{ secrets.COPY_LAST }};
+
+      # - name: Build and publish app
+      #   uses: appleboy/ssh-action@master
+      #   with:
+      #     host: ${{ secrets.HOST }}
+      #     username: ${{ secrets.USERNAME }}
+      #     port: ${{ secrets.PORT }}
+      #     key: ${{ secrets.SSHKEY }}
+      #     script: rm -rf app/;cd ${{ secrets.COPY_LAST }};dotnet build -c Release -o ${{ env.APP_FOLDER }};dotnet publish -c Release -o ${{ env.APP_FOLDER }};
+
+      # - name: Move files to deployment folder
+      #   uses: appleboy/ssh-action@master
+      #   with:
+      #     host: ${{ secrets.HOST }}
+      #     username: ${{ secrets.USERNAME }}
+      #     port: ${{ secrets.PORT }}
+      #     key: ${{ secrets.SSHKEY }}
+      #     script: sudo systemctl stop ${{ secrets.APP_SERVICE }};sudo rm -rf ${{ secrets.APP_LOCATION }};sudo mv app/ ${{ secrets.APP_LOCATION }};sudo systemctl start ${{ secrets.APP_SERVICE }};sudo systemctl reload nginx;
         
