@@ -41,7 +41,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: ${{ env.APP_NAME }}
-          path: ${{env.DOTNET_ROOT}}/${{ env.APP_FOLDER }}
+          path: ${{ env.APP_FOLDER }}
 
   deploy:
     runs-on: ubuntu-latest
