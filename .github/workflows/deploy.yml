@@ -52,5 +52,5 @@ jobs:
           username: ${{ secrets.USERNAME }}
           port: ${{ secrets.PORT }}
           key: ${{ secrets.SSHKEY }}
-          script: sudo rm -rf ${{ secrets.APP_LOCATION }};sudo mv app/ ${{ secrets.APP_LOCATION }}; sudo systemctl reload nginx;
+          script: sudo systemctl stop {{ APP_SERVICE }};sudo rm -rf ${{ secrets.APP_LOCATION }};sudo mv app/ ${{ secrets.APP_LOCATION }};sudo systemctl start {{ APP_SERVICE }};sudo systemctl reload nginx;
         
