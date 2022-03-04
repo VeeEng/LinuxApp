@@ -18,6 +18,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: Logging Variables
+      - run: echo ${{ env.DOTNET_VERSION }}
+
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v1
         with:
