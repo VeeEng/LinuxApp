@@ -34,5 +34,5 @@ jobs:
           username: ${{ secrets.USERNAME }}
           port: ${{ secrets.PORT }}
           key: ${{ secrets.SSHKEY }}
-          script: rm -rf ${{ secrets.COPY_LAST }};mv ${{ secrets.COPY_FROM }} ${{ secrets.COPY_LAST }};cd ${{ secrets.COPY_LAST }};dotnet build -c Release -o app;dotnet publish -c Release -o app;mv app/ ../../../var/www/linuxapp; sudo systemctl reload nginx;
+          script: rm -rf ${{ secrets.COPY_LAST }};mv ${{ secrets.COPY_FROM }} ${{ secrets.COPY_LAST }};cd ${{ secrets.COPY_LAST }};dotnet build -c Release -o app;dotnet publish -c Release -o app;sudo mv app/ ../../../var/www/linuxapp; sudo systemctl reload nginx;
           
