@@ -22,7 +22,7 @@ jobs:
         run: echo ${{ env.DOTNET_VERSION }}
 
       - name: Logging Environment Secrets
-        environment: Develop
+        environment: develop
         env:
           Location: ${{ secrets.COPY_LAST }}
         run: echo ${{ env.Location }}
