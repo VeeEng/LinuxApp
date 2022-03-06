@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using LinuxApp.Api.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace LinuxApp.Api.Controllers
 {
@@ -11,12 +13,24 @@ namespace LinuxApp.Api.Controllers
     [Route("[controller]")]
     public class WeatherForecastController : ControllerBase
     {
+        private readonly Jwt _jwt;
+        private readonly Mail _mail;
+        private readonly Cloudinary _cloudinary;
+        public WeatherForecastController(IOptions<Jwt> jwt, IOptions<Mail> mail, 
+            IOptions<Cloudinary> cloudinary, IConfiguration configuration)
+        {
+            _jwt = jwt.Value;
+            _mail = mail.Value;
+            _cloudinary = cloudinary.Value;
+            _configuration = configuration;
+        }
         private static readonly string[] Summaries = new[]
         {
             "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
         };
 
         private readonly ILogger<WeatherForecastController> _logger;
+        private readonly IConfiguration _configuration;
 
         public WeatherForecastController(ILogger<WeatherForecastController> logger)
         {
@@ -49,10 +63,25 @@ namespace LinuxApp.Api.Controllers
             .ToArray();
         }
 
-        [HttpGet("kupsysucks")]
-        public string GetThem()
+        [HttpGet("environmentvariables")]
+        public Response GetThem()
         {
-            return "Kupsy Sucker is an idiot";
+            var conStr = _configuration.GetConnectionString("DefaultConnection");
+            return new ()
+            { 
+                Cloudinary = _cloudinary,
+                Mail = _mail,
+                Jwt = _jwt,
+                ConnectionString = conStr
+            };
         }
+    }
+
+    public class Response
+    {
+        public Cloudinary Cloudinary { get; set; }
+        public Jwt Jwt { get; set; }
+        public Mail Mail { get; set; }
+        public string ConnectionString { get; set; }
     }
 }

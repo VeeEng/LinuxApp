@@ -13,29 +13,11 @@ on:
 
 jobs:
 
-  logging:
-    runs-on: ubuntu-latest
-    environment: developer
-
-    steps:
-      - name: Logging Secrets
-        env:
-          Location: ${{ secrets.COPY_LAST }}
-        run: echo ${{ env.Location }}
-
   build:
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v2
-
-      - name: Logging Variables
-        run: echo ${{ env.DOTNET_VERSION }}
-
-      - name: Logging Environment Secrets  
-        env:
-          Location: ${{ secrets.COPY_LAST }}
-        run: echo ${{ env.Location }}
 
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v1

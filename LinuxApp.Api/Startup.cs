@@ -1,3 +1,4 @@
+using LinuxApp.Api.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpOverrides;
@@ -26,6 +27,10 @@ namespace LinuxApp.Api
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "LinuxApp.Api", Version = "v1" });
             });
+
+            services.Configure<Cloudinary>(Configuration.GetSection(Cloudinary.Name));
+            services.Configure<Jwt>(Configuration.GetSection(Jwt.Name));
+            services.Configure<Mail>(Configuration.GetSection(nameof(Mail)));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
