@@ -13,17 +13,6 @@ namespace LinuxApp.Api.Controllers
     [Route("[controller]")]
     public class WeatherForecastController : ControllerBase
     {
-        private readonly Jwt _jwt;
-        private readonly Mail _mail;
-        private readonly Cloudinary _cloudinary;
-        public WeatherForecastController(IOptions<Jwt> jwt, IOptions<Mail> mail, 
-            IOptions<Cloudinary> cloudinary, IConfiguration configuration)
-        {
-            _jwt = jwt.Value;
-            _mail = mail.Value;
-            _cloudinary = cloudinary.Value;
-            _configuration = configuration;
-        }
         private static readonly string[] Summaries = new[]
         {
             "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
@@ -31,9 +20,16 @@ namespace LinuxApp.Api.Controllers
 
         private readonly ILogger<WeatherForecastController> _logger;
         private readonly IConfiguration _configuration;
-
-        public WeatherForecastController(ILogger<WeatherForecastController> logger)
+        private readonly Jwt _jwt;
+        private readonly Mail _mail;
+        private readonly Cloudinary _cloudinary;
+        public WeatherForecastController(IOptions<Jwt> jwt, IOptions<Mail> mail, 
+            IOptions<Cloudinary> cloudinary, IConfiguration configuration, ILogger<WeatherForecastController> logger)
         {
+            _jwt = jwt.Value;
+            _mail = mail.Value;
+            _cloudinary = cloudinary.Value;
+            _configuration = configuration;
             _logger = logger;
         }
 
