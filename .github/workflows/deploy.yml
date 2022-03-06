@@ -15,7 +15,7 @@ jobs:
 
   logging:
     runs-on: ubuntu-latest
-    environment: develop
+    environment: developer
 
     steps:
       - name: Logging Secrets
