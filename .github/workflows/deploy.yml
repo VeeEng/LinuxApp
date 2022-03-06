@@ -12,8 +12,19 @@ on:
     branches: [ master ]
 
 jobs:
+
+  logging:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Logging Secrets
+        env:
+          Location: ${{ secrets.COPY_LAST }}
+        run: echo ${{ env.Location }}
+        
   build:
     runs-on: ubuntu-latest
+    environment: develop
 
     steps:
       - uses: actions/checkout@v2
@@ -22,15 +33,12 @@ jobs:
         run: echo ${{ env.DOTNET_VERSION }}
 
       - name: Logging Environment Secrets
-        environment: develop
+        
         env:
           Location: ${{ secrets.COPY_LAST }}
         run: echo ${{ env.Location }}
 
-      - name: Logging Secrets
-        env:
-          Location: ${{ secrets.COPY_LAST }}
-        run: echo ${{ env.Location }}
+      
 
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v1
