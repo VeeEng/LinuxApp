@@ -49,10 +49,10 @@ namespace LinuxApp.Api.Controllers
             .ToArray();
         }
 
-        [HttpGet("kupsy")]
+        [HttpGet("kupsyrep")]
         public string GetThem()
         {
-            return "Kupsy is an idiot";
+            return "Kupsy Rep is an idiot";
         }
     }
 }
