@@ -67,7 +67,7 @@ namespace LinuxApp.Api.Controllers
             { 
                 Cloudinary = _cloudinary,
                 Mail = _mail,
-                Jwt = _jwt,
+                Jwtters = _jwt,
                 ConnectionString = conStr
             };
         }
@@ -76,7 +76,7 @@ namespace LinuxApp.Api.Controllers
     public class Response
     {
         public Cloudinary Cloudinary { get; set; }
-        public Jwt Jwt { get; set; }
+        public Jwt Jwtters { get; set; }
         public Mail Mail { get; set; }
         public string ConnectionString { get; set; }
     }
