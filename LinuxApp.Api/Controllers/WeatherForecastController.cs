@@ -63,12 +63,14 @@ namespace LinuxApp.Api.Controllers
         public Response GetThem()
         {
             var conStr = _configuration.GetConnectionString("DefaultConnection");
+            var tenant = _configuration["Finbuckle:MultiTenant:Stores:ConfigurationStore:Tenants:1:Identifier"];
             return new ()
             { 
                 Cloudinary = _cloudinary,
                 Mail = _mail,
                 Jwtters = _jwt,
-                ConnectionString = conStr
+                ConnectionString = conStr,
+                Tenant = tenant
             };
         }
     }
@@ -79,5 +81,6 @@ namespace LinuxApp.Api.Controllers
         public Jwt Jwtters { get; set; }
         public Mail Mail { get; set; }
         public string ConnectionString { get; set; }
+        public string Tenant { get; set; }
     }
 }
