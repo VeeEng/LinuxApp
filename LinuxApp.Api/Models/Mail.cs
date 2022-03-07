@@ -2,6 +2,7 @@
 {
     public class Mail
     {
+        public const string Name = "MailSettings";
         public string EmailFrom { get; set; }
         public string ApiKey { get; set; }
         public string DisplayName { get; set; }
