@@ -30,7 +30,7 @@ namespace LinuxApp.Api
 
             services.Configure<Cloudinary>(Configuration.GetSection(Cloudinary.Name));
             services.Configure<Jwt>(Configuration.GetSection(Jwt.Name));
-            services.Configure<Mail>(Configuration.GetSection(nameof(Mail.Name)));
+            services.Configure<Mail>(Configuration.GetSection(Mail.Name));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
